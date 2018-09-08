@@ -10,7 +10,3 @@ branches:
 cache:
   directories:
   - '$HOME/.m2/repository'
-  - '$HOME/.mvn'
-
-# clean 후 Build (Build시 자동으로 test 수행)
-script: "./mvnw clean build"
