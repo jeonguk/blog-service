@@ -35,8 +35,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 	}
 
 	@Override
-	public void configureMessageConverters(
-			List<HttpMessageConverter<?>> converters) {
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		super.configureMessageConverters(converters);
 		converters.add(new MappingJackson2HttpMessageConverter());
 		converters.add(responseBodyConverter());
