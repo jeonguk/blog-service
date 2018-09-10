@@ -5,6 +5,7 @@ import com.jeonguk.web.dto.PostDTO;
 import com.jeonguk.web.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @ApiVersion
 public class PostController {
 
+	private final RestTemplate restTemplate;
 	private final PostService postService;
 
 	@GetMapping("/{postId}")
