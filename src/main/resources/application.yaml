@@ -21,6 +21,7 @@ spring:
     properties:
       hibernate.format_sql: true
     open-in-view: false
+
 logging:
   file: logs/blog_service_app.log
   pattern:
