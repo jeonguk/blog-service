@@ -24,6 +24,10 @@ $ mvn clean install
 $ java -jar target/blog-service-0.0.1-SNAPSHOT.jar
 ```
 
+##
+### API Version management
+- ApiVersion Annotation class (uri prefix + /api/v*)
+
 
 ##
 ### TEST usnig CURL
