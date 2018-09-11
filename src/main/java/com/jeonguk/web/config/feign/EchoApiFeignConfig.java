@@ -1,5 +1,6 @@
 package com.jeonguk.web.config.feign;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.EchoApiException;
 import feign.Client;
@@ -13,12 +14,15 @@ import feign.httpclient.ApacheHttpClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @AllArgsConstructor
 @Configuration
@@ -30,8 +34,15 @@ public class EchoApiFeignConfig {
     public Client client() {
         final HttpClientBuilder builder = HttpClientBuilder.create()
             .setMaxConnPerRoute(100)
-            .setMaxConnTotal(100);
+            .setMaxConnTotal(100)
+            .setDefaultHeaders(getHeaders());
         return new ApacheHttpClient(builder.build());
+    }
+
+    // Custom headers
+    private List<Header> getHeaders() {
+        Header header = new BasicHeader("TEST-HEADER", "BLOG-SERVICE");
+        return Lists.newArrayList(header);
     }
 
     @Bean
