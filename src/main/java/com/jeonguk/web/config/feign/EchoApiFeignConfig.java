@@ -33,9 +33,9 @@ public class EchoApiFeignConfig {
     public Feign.Builder feignBuilder() {
         return Feign.builder()
             .client(client())
-            .errorDecoder(errorDecoder())
             .decoder(decoder())
-            .encoder(encoder());
+            .encoder(encoder())
+            .errorDecoder(errorDecoder());
     }
 
     private Client client() {
