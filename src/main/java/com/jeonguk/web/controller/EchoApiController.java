@@ -3,6 +3,7 @@ package com.jeonguk.web.controller;
 import com.jeonguk.web.config.annotation.ApiVersion;
 import com.jeonguk.web.dto.PostDTO;
 import com.jeonguk.web.service.feign.EchoService;
+import com.jeonguk.web.service.feign.ExtApiService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,16 @@ import java.util.Map;
 public class EchoApiController {
 
     private final EchoService echoService;
+    private final ExtApiService extApiService;
 
     @GetMapping("/one")
-    List<PostDTO.ResPost> getPostList() {
+    List<PostDTO.ResPost> getPostListOne() {
         return echoService.getPostList();
+    }
+
+    @GetMapping("/two")
+    List<PostDTO.ResPost> getPostListTwo() {
+        return extApiService.getPostList();
     }
 
     @GetMapping("/with-header")
