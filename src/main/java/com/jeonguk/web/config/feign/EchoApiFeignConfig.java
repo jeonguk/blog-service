@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.EchoApiException;
 import feign.Client;
 import feign.Feign;
-import feign.Response;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 public class EchoApiFeignConfig {
 
@@ -51,10 +51,6 @@ public class EchoApiFeignConfig {
         return Lists.newArrayList(new BasicHeader("TEST-HEADER", "BLOG-SERVICE ECHO1"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
     }
 
-    private ErrorDecoder errorDecoder() {
-        return new EchoApiFeignConfig.EchoApiExceptionHandler();
-    }
-
     private Decoder decoder() {
         return new GsonDecoder(gson);
     }
@@ -63,20 +59,18 @@ public class EchoApiFeignConfig {
         return new GsonEncoder(gson);
     }
 
-    @Slf4j
-    public static class EchoApiExceptionHandler implements ErrorDecoder {
-        @Override
-        public Exception decode(String methodKey, Response response) {
-            final String body;
+    private ErrorDecoder errorDecoder() {
+        return (methodKey, response) -> {
             EchoApiException.ErrorResponse errorResponse = null;
             try {
-                body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
+                final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
                 log.error("EchoApiFeignConfig ErrorResponse : {}", body);
-                errorResponse = new Gson().fromJson(body, EchoApiException.ErrorResponse.class);
+                errorResponse = gson.fromJson(body, EchoApiException.ErrorResponse.class);
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
             return new EchoApiException(errorResponse, response.status());
-        }
+        };
     }
+
 }
