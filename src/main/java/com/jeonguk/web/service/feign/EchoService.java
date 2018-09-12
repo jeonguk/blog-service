@@ -14,7 +14,7 @@ import java.util.Map;
 @FeignClient(name = "echo", url = "${echo.api.server.url}", configuration = EchoApiFeignConfig.class)
 public interface EchoService {
 
-    @GetMapping("/api/echo")
+    @GetMapping("/api/echo/one")
     List<PostDTO.ResPost> getPostList();
 
     @GetMapping("/api/echo/with-header")
