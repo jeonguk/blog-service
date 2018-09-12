@@ -2,7 +2,7 @@ package com.jeonguk.web.config.feign;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.jeonguk.web.config.feign.exception.EchoApiException;
+import com.jeonguk.web.config.feign.exception.ExtApiException;
 import feign.Client;
 import feign.Feign;
 import feign.codec.Decoder;
@@ -25,30 +25,30 @@ import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
-public class EchoApiFeignConfig {
+public class ExtApiFeignConfig {
 
     private final Gson gson;
 
     @Bean
     public Feign.Builder feignBuilder() {
         return Feign.builder()
-            .client(client())
-            .decoder(decoder())
-            .encoder(encoder())
-            .errorDecoder(errorDecoder());
+                .client(client())
+                .decoder(decoder())
+                .encoder(encoder())
+                .errorDecoder(errorDecoder());
     }
 
     private Client client() {
         final HttpClientBuilder builder = HttpClientBuilder.create()
-            .setMaxConnPerRoute(100)
-            .setMaxConnTotal(100)
-            .setDefaultHeaders(getHeaders());
+                .setMaxConnPerRoute(100)
+                .setMaxConnTotal(100)
+                .setDefaultHeaders(getHeaders());
         return new ApacheHttpClient(builder.build());
     }
 
     // Custom headers
     private List<Header> getHeaders() {
-        return Lists.newArrayList(new BasicHeader("TEST-HEADER", "EchoApiFeignConfig"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
+        return Lists.newArrayList(new BasicHeader("TEST-HEADER", "ExtApiFeignConfig"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
     }
 
     private Decoder decoder() {
@@ -61,16 +61,15 @@ public class EchoApiFeignConfig {
 
     private ErrorDecoder errorDecoder() {
         return (methodKey, response) -> {
-            EchoApiException.ErrorResponse errorResponse = null;
+            ExtApiException.ErrorResponse errorResponse = null;
             try {
                 final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
-                log.error("EchoApiFeignConfig ErrorResponse : {}", body);
-                errorResponse = gson.fromJson(body, EchoApiException.ErrorResponse.class);
+                log.error("ExtApiFeignConfig ErrorResponse : {}", body);
+                errorResponse = gson.fromJson(body, ExtApiException.ErrorResponse.class);
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
-            return new EchoApiException(errorResponse, response.status());
+            return new ExtApiException(errorResponse, response.status());
         };
     }
-
 }

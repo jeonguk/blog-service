@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@FeignClient(name = "echo", url = "${echo.api.server.url}", configuration = EchoApiFeignConfig.class)
+@FeignClient(name = "echo-feign-client", url = "${echo.api.server.url}", configuration = EchoApiFeignConfig.class)
 public interface EchoService {
 
     @GetMapping("/api/echo/one")
