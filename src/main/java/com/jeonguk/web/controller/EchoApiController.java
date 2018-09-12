@@ -23,7 +23,7 @@ public class EchoApiController {
 
     private final EchoService echoService;
 
-    @GetMapping
+    @GetMapping("/one")
     List<PostDTO.ResPost> getPostList() {
         return echoService.getPostList();
     }

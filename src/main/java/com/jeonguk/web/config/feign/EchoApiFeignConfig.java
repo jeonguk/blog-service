@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.EchoApiException;
 import feign.Client;
+import feign.Feign;
 import feign.Response;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
@@ -18,20 +19,26 @@ import org.apache.http.Header;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @AllArgsConstructor
-@Configuration
 public class EchoApiFeignConfig {
 
     private final Gson gson;
 
     @Bean
-    public Client client() {
+    public Feign.Builder feignBuilder() {
+        return Feign.builder()
+            .client(client())
+            .errorDecoder(errorDecoder())
+            .decoder(decoder())
+            .encoder(encoder());
+    }
+
+    private Client client() {
         final HttpClientBuilder builder = HttpClientBuilder.create()
             .setMaxConnPerRoute(100)
             .setMaxConnTotal(100)
@@ -41,22 +48,18 @@ public class EchoApiFeignConfig {
 
     // Custom headers
     private List<Header> getHeaders() {
-        Header header = new BasicHeader("TEST-HEADER", "BLOG-SERVICE");
-        return Lists.newArrayList(header);
+        return Lists.newArrayList(new BasicHeader("TEST-HEADER", "BLOG-SERVICE ECHO1"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
     }
 
-    @Bean
-    public ErrorDecoder errorDecoder() {
+    private ErrorDecoder errorDecoder() {
         return new EchoApiFeignConfig.EchoApiExceptionHandler();
     }
 
-    @Bean
-    public Decoder decoder() {
+    private Decoder decoder() {
         return new GsonDecoder(gson);
     }
 
-    @Bean
-    public Encoder encoder() {
+    private Encoder encoder() {
         return new GsonEncoder(gson);
     }
 
@@ -68,7 +71,7 @@ public class EchoApiFeignConfig {
             EchoApiException.ErrorResponse errorResponse = null;
             try {
                 body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
-                log.error("EchoApi ErrorResponse : {}", body);
+                log.error("EchoApiFeignConfig ErrorResponse : {}", body);
                 errorResponse = new Gson().fromJson(body, EchoApiException.ErrorResponse.class);
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
