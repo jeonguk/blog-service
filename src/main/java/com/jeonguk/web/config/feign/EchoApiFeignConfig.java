@@ -7,7 +7,6 @@ import feign.Client;
 import feign.Feign;
 import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -20,16 +19,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
-@AllArgsConstructor
 public class EchoApiFeignConfig {
 
-    private final Gson gson;
-
     @Bean
-    public Feign.Builder feignBuilder() {
+    public Feign.Builder feignBuilder(Gson gson) {
         return Feign.builder()
             .client(client())
-            .errorDecoder(errorDecoder());
+            .errorDecoder(errorDecoder(gson));
     }
 
     private Client client() {
@@ -45,7 +41,7 @@ public class EchoApiFeignConfig {
         return Lists.newArrayList(new BasicHeader("TEST-HEADER", "EchoApiFeignConfig"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
     }
 
-    private ErrorDecoder errorDecoder() {
+    private ErrorDecoder errorDecoder(Gson gson) {
         return (methodKey, response) -> {
             EchoApiException.ErrorResponse errorResponse = null;
             try {

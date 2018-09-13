@@ -7,7 +7,6 @@ import feign.Client;
 import feign.Feign;
 import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -20,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
-@AllArgsConstructor
 public class ExtApiFeignConfig {
 
     @Bean
