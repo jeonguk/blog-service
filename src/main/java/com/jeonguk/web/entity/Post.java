@@ -14,6 +14,7 @@ public class Post {
 	private Long id;
 	private String title;
 	private String content;
+	private String userName;
 	private LocalDateTime createdAt;
 	@PrePersist
 	public void prePersist() {

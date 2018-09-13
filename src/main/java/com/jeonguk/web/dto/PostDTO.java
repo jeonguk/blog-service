@@ -7,6 +7,7 @@ public class PostDTO {
 	@Data
 	public static class ReqPost {
 		private String title;
+		private String userName;
 		private String content;
 	}
 
@@ -15,6 +16,7 @@ public class PostDTO {
 		private Long id;
 		private String title;
 		private String content;
+		private String userName;
 		private String createdAt;
 	}
 

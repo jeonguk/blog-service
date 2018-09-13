@@ -42,6 +42,7 @@ public class PostServiceImpl implements PostService {
 		final Post post = new Post();
 		post.setTitle(request.getTitle());
 		post.setContent(request.getContent());
+		post.setUserName(request.getUserName());
 		return modelMapper.map(postRepository.save(post), PostDTO.ResPost.class);
 	}
 }

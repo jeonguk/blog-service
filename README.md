@@ -33,5 +33,9 @@ $ java -jar target/blog-service-0.0.1-SNAPSHOT.jar
 ### TEST usnig CURL
 
 ```
-$ curl -d '{"title":"post title2", "content":"post content2"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/posts
+$ curl -d '{"title":"POST TITLE 1", "content":"POST CONTENT1", "user_name":"USER1"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/v1/posts
 ```
+
+
+### Data DTO Transfer : ECHO SERVICE -> (Feign) -> BLOG SERVICE
+- Gson : LOWER_CASE_WITH_UNDERSCORES -> LOWER_CASE_WITH_UNDERSCORES

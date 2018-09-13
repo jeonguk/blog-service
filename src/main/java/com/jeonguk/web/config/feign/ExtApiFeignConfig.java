@@ -5,11 +5,7 @@ import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.ExtApiException;
 import feign.Client;
 import feign.Feign;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
 import feign.httpclient.ApacheHttpClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +23,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ExtApiFeignConfig {
 
-    private final Gson gson;
-
     @Bean
-    public Feign.Builder feignBuilder() {
+    public Feign.Builder feignBuilder(Gson gson) {
         return Feign.builder()
                 .client(client())
-                .decoder(decoder())
-                .encoder(encoder())
-                .errorDecoder(errorDecoder());
+                .errorDecoder(errorDecoder(gson));
     }
 
     private Client client() {
@@ -51,19 +43,11 @@ public class ExtApiFeignConfig {
         return Lists.newArrayList(new BasicHeader("TEST-HEADER", "ExtApiFeignConfig"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
     }
 
-    private Decoder decoder() {
-        return new GsonDecoder(gson);
-    }
-
-    private Encoder encoder() {
-        return new GsonEncoder(gson);
-    }
-
-    private ErrorDecoder errorDecoder() {
+    private ErrorDecoder errorDecoder(Gson gson) {
         return (methodKey, response) -> {
             ExtApiException.ErrorResponse errorResponse = null;
             try {
-                final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
+                final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8);
                 log.error("ExtApiFeignConfig ErrorResponse : {}", body);
                 errorResponse = gson.fromJson(body, ExtApiException.ErrorResponse.class);
             } catch (IOException e) {

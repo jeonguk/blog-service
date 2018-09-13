@@ -7,15 +7,15 @@ import lombok.Getter;
 public class ExtApiException extends RuntimeException {
     @Data
     public static class ErrorResponse {
-        private Long code;
-        private String msg;
+        private Integer status;
+        private String message;
     }
 
-    private final transient ExtApiException.ErrorResponse errorResponse;
+    private final transient ErrorResponse errorResponse;
     private final Integer status;
 
-    public ExtApiException(ExtApiException.ErrorResponse response, Integer status) {
-        super();
+    public ExtApiException(ErrorResponse response, Integer status) {
+        super("ExtApiException");
         this.errorResponse = response;
         this.status = status;
     }

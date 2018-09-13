@@ -5,11 +5,7 @@ import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.EchoApiException;
 import feign.Client;
 import feign.Feign;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
-import feign.gson.GsonDecoder;
-import feign.gson.GsonEncoder;
 import feign.httpclient.ApacheHttpClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +29,6 @@ public class EchoApiFeignConfig {
     public Feign.Builder feignBuilder() {
         return Feign.builder()
             .client(client())
-            .decoder(decoder())
-            .encoder(encoder())
             .errorDecoder(errorDecoder());
     }
 
@@ -49,14 +43,6 @@ public class EchoApiFeignConfig {
     // Custom headers
     private List<Header> getHeaders() {
         return Lists.newArrayList(new BasicHeader("TEST-HEADER", "EchoApiFeignConfig"), new BasicHeader("TEST-HEADER2", "BLOG-SERVICE ECHO1"));
-    }
-
-    private Decoder decoder() {
-        return new GsonDecoder(gson);
-    }
-
-    private Encoder encoder() {
-        return new GsonEncoder(gson);
     }
 
     private ErrorDecoder errorDecoder() {
