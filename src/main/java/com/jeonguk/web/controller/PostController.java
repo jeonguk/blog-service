@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,9 +19,9 @@ public class PostController {
 	private final RestTemplate restTemplate;
 	private final PostService postService;
 
-	@GetMapping("/{postId}")
-	PostDTO.ResPost getPost(@PathVariable("postId") Long postId) {
-		return postService.getPost(postId);
+	@GetMapping("/{id}")
+	PostDTO.ResPost getPost(@PathVariable("id") Long id) {
+		return postService.getPost(id);
 	}
 
 	@GetMapping
@@ -29,7 +30,7 @@ public class PostController {
 	}
 
 	@PostMapping
-	PostDTO.ResPost savePost(@RequestBody PostDTO.ReqPost reqPost) {
+	PostDTO.ResPost savePost(@RequestBody @Valid PostDTO.ReqPost reqPost) {
 		return postService.savePost(reqPost);
 	}
 

@@ -8,6 +8,7 @@ import com.jeonguk.web.repository.PostRepository;
 import com.jeonguk.web.service.PostService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.ListUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +26,15 @@ public class PostServiceImpl implements PostService {
 	private final PostRepository postRepository;
 
 	@Override
-	public PostDTO.ResPost getPost(Long postId) {
-		final Optional<Post> post = postRepository.findById(postId);
+	public PostDTO.ResPost getPost(Long id) {
+		final Optional<Post> post = postRepository.findById(id);
 		return post.map(p -> modelMapper.map(p, PostDTO.ResPost.class)).orElseThrow(() -> new CustomException(CustomStatus.RESOURCE_NOT_FOUND));
 	}
 
 	@Override
 	public List<PostDTO.ResPost> getPostAll() {
 		final List<Post> postList = postRepository.findAll();
-		return postList.stream().map(post -> modelMapper.map(post, PostDTO.ResPost.class)).collect(Collectors.toList());
+		return ListUtils.emptyIfNull(postList).stream().map(post -> modelMapper.map(post, PostDTO.ResPost.class)).collect(Collectors.toList());
 	}
 
 	@Override
