@@ -5,6 +5,8 @@ import com.jeonguk.web.dto.PostDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
@@ -19,5 +21,8 @@ public interface EchoService {
 
     @GetMapping("/api/echo/with-header")
     List<PostDTO.ResPost> getPostListWighHeader(@RequestHeader Map<String, String> header);
+
+    @PostMapping("/api/echo/save")
+    PostDTO.ResPost savePost(@RequestBody PostDTO.ReqPost req);
 
 }

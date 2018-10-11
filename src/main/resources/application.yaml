@@ -28,8 +28,9 @@ logging:
     console: "%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"
     file: "%d %-5level [%thread] %logger{0} : %msg%n"
   level:
-    org.springframework.web: INFO
-    com.jeonguk.web: INFO
+    org.springframework.web: DEBUG
+    com.jeonguk.web: DEBUG
+    com.feign: DEBUG
     org:
       hibernate.SQL: DEBUG
       hibernate.type.descriptor.sql.BasicBinder: TRACE

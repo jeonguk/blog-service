@@ -5,9 +5,8 @@ import com.jeonguk.web.dto.PostDTO;
 import com.jeonguk.web.service.feign.EchoService;
 import com.jeonguk.web.service.feign.ExtApiService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.Map;
 /**
  * Call http://localhost:8080/api/v1/echo
  */
+@Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping("/echo")
@@ -40,5 +40,11 @@ public class EchoApiController {
         final Map<String, String> header = new HashMap<>();
         header.put("TEST-HEADER", "BLOG-SERVICE");
         return echoService.getPostListWighHeader(header);
+    }
+
+    @PostMapping("/save")
+    PostDTO.ResPost savePost(@RequestBody PostDTO.ReqPost req) {
+        log.info("POST SAVE {}", req);
+        return echoService.savePost(req);
     }
 }

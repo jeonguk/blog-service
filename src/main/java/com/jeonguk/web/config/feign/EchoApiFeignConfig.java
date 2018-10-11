@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.jeonguk.web.config.feign.exception.EchoApiException;
 import feign.Client;
 import feign.Feign;
+import feign.Logger;
 import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +26,19 @@ public class EchoApiFeignConfig {
     public Feign.Builder feignBuilder(Gson gson) {
         return Feign.builder()
             .client(client())
+            .logLevel(logLevel())
             .errorDecoder(errorDecoder(gson));
     }
 
     private Client client() {
         final HttpClientBuilder builder = HttpClientBuilder.create()
             .setMaxConnPerRoute(100)
-            .setMaxConnTotal(100)
-            .setDefaultHeaders(getHeaders());
+            .setMaxConnTotal(100);
         return new ApacheHttpClient(builder.build());
+    }
+
+    private Logger.Level logLevel() {
+        return Logger.Level.FULL;
     }
 
     // Custom headers
@@ -45,7 +50,7 @@ public class EchoApiFeignConfig {
         return (methodKey, response) -> {
             EchoApiException.ErrorResponse errorResponse = null;
             try {
-                final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name());
+                final String body = IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8);
                 log.error("EchoApiFeignConfig ErrorResponse : {}", body);
                 errorResponse = gson.fromJson(body, EchoApiException.ErrorResponse.class);
             } catch (IOException e) {
