@@ -1,6 +1,7 @@
 package com.jeonguk.web.config;
 
 import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jeonguk.web.config.ext.ApiVersionRequestMappingHandlerMapping;
 import org.modelmapper.ModelMapper;
@@ -45,4 +46,13 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         return converter;
     }
 
+    @Bean
+    public Gson gson() {
+        return new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setPrettyPrinting()
+                .serializeNulls()
+                .disableHtmlEscaping()
+                .create();
+    }
 }
