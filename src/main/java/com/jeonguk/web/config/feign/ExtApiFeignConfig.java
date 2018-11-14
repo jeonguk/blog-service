@@ -25,12 +25,12 @@ public class ExtApiFeignConfig {
     @Bean
     public Feign.Builder feignBuilder(Gson gson) {
         return Feign.builder()
-                .client(client())
                 .logLevel(logLevel())
                 .errorDecoder(errorDecoder(gson));
     }
 
-    private Client client() {
+    @Bean
+    public Client client() {
         final HttpClientBuilder builder = HttpClientBuilder.create()
                 .setMaxConnPerRoute(100)
                 .setMaxConnTotal(100);
